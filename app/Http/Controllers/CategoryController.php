@@ -33,7 +33,8 @@ class CategoryController extends Controller
     {
         try {
             $request->validate([
-                'en_name' => 'required|string|max:255',
+                'index' => 'required|integer|min:0|max:255',
+                                'en_name' => 'required|string|max:255',
                 'fr_name' => 'required|string|max:255',
             ]);
 
@@ -79,6 +80,7 @@ class CategoryController extends Controller
         try {
             // Validate incoming request data
             $request->validate([
+                'index' => 'required|integer|min:0|max:255',
                 'en_name' => 'sometimes|required|string|max:255',
                 'fr_name' => 'sometimes|required|string|max:255',
             ]);
