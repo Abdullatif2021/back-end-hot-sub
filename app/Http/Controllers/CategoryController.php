@@ -25,7 +25,20 @@ class CategoryController extends Controller
             return $this->errorResponse($e, 500);
         }
     }
+    public function categoriesWithItems()
+    {
+        try {
+            $categories = Category::with('items')->get();
 
+            return response()->json([
+                'success' => true,
+                'message' => 'Categories with items retrieved successfully',
+                'data' => $categories,
+            ], 200);
+        } catch (Exception $e) {
+            return $this->errorResponse($e, 500);
+        }
+    }
     /**
      * Store a newly created resource in storage.
      */

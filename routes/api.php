@@ -171,6 +171,7 @@ Route::delete('aboutus/{id}', [AboutUsController::class, 'destroy']);
 //     Route::middleware(['role:superadmin'])->group(function () {
 
         Route::get('categories/count', [CategoryController::class, 'count']);
+        Route::get('categories/all', [CategoryController::class, 'categoriesWithItems']);
 
         Route::put('categories/{id}', [CategoryController::class, 'update']);
 
