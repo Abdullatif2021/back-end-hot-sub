@@ -76,38 +76,38 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
-        try {
-            // Validate incoming request data
-            $request->validate([
-                'index' => 'required|integer|min:0|max:255',
-                'en_name' => 'sometimes|required|string|max:255',
-                'fr_name' => 'sometimes|required|string|max:255',
-            ]);
-    
-            // Find the category by ID, if not found, it will throw a ModelNotFoundException
-            $category = Category::findOrFail($id);
-    
-            // Update the category with validated data
-            $category->update($request->only(['en_name', 'fr_name']));
-    
-            // Return a success response
-            return response()->json([
-                'success' => true,
-                'message' => 'Category updated successfully',
-                'data' => $category,
-            ], 200);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Handle validation exceptions
-            return $this->errorResponse($e, 422);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Handle model not found exception
-            return $this->errorResponse($e, 404);
-        } catch (Exception $e) {
-            // Handle any other exceptions
-            return $this->errorResponse($e, 500);
-        }
+{
+    try {
+        // Validate incoming request data
+        $request->validate([
+            'index' => 'sometimes|integer|min:0|max:255',
+            'en_name' => 'sometimes|required|string|max:255',
+            'fr_name' => 'sometimes|required|string|max:255',
+        ]);
+
+        // Find the category by ID, if not found, it will throw a ModelNotFoundException
+        $category = Category::findOrFail($id);
+
+        // Update the category with validated data
+        $category->update($request->only(['index', 'en_name', 'fr_name']));
+
+        // Return a success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Category updated successfully',
+            'data' => $category,
+        ], 200);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Handle validation exceptions
+        return $this->errorResponse($e, 422);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        // Handle model not found exception
+        return $this->errorResponse($e, 404);
+    } catch (Exception $e) {
+        // Handle any other exceptions
+        return $this->errorResponse($e, 500);
     }
+}
     
 
     /**
