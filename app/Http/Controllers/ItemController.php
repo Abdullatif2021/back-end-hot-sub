@@ -13,10 +13,29 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
 {
     try {
-        $items = Item::with('category')->get();
+        // Get the number of items per page from the request or default to 10
+        $perPage = $request->input('per_page', 10);
+        $search = $request->input('search', '');
+        $sortColumn = $request->input('sort_column', 'id');
+        $sortDirection = $request->input('sort_direction', 'asc');
+
+        // Query the items with search, sorting and pagination
+        $query = Item::with('category')
+            ->where('en_name', 'LIKE', "%$search%")
+            ->orWhere('fr_name', 'LIKE', "%$search%")
+            ->orWhere('price', 'LIKE', "%$search%")
+            ->orWhereHas('category', function ($query) use ($search) {
+                $query->where('en_name', 'LIKE', "%$search%");
+            });
+
+        // Apply sorting
+        $query->orderBy($sortColumn, $sortDirection);
+
+        // Paginate the result
+        $items = $query->paginate($perPage);
 
         // Update image URLs for each item
         foreach ($items as $item) {
