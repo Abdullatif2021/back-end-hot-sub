@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->integer('index')->after('fr_name'); // Adjust the position as needed
-        });
+            $table->integer('index')->nullable()->after('fr_name'); // Adjust the position as needed
+                                });
     }
 
     /**
