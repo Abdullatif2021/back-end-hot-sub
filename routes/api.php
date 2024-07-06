@@ -196,7 +196,7 @@ Route::delete('aboutus/{id}', [AboutUsController::class, 'destroy']);
 
         Route::get('items/count', [ItemController::class, 'count']);
 
-        Route::put('items/{id}', [ItemController::class, 'update']);
+        Route::post('items/{id}', [ItemController::class, 'update']);
 
         Route::get('items', [ItemController::class, 'index']);
 

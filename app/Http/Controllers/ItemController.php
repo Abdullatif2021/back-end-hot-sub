@@ -117,7 +117,8 @@ class ItemController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
+            // Validate the request data
+            $validatedData = $request->validate([
                 'category_id' => 'sometimes|exists:categories,id',
                 'en_name' => 'sometimes|string|max:255',
                 'fr_name' => 'sometimes|string|max:255',
@@ -126,10 +127,25 @@ class ItemController extends Controller
                 'price' => 'sometimes|numeric',
                 'image' => 'nullable|image|max:2048',
             ]);
-
+    
+            // Find the item by ID
             $item = Item::findOrFail($id);
-            $item->update($request->all());
-
+    
+            // Handle image upload if present
+            if ($request->hasFile('image')) {
+                // Delete the old image if it exists
+                if ($item->image) {
+                    Storage::disk('public')->delete($item->image);
+                }
+                // Store the new image
+                $path = $request->file('image')->store('items', 'public');
+                $validatedData['image'] = $path;
+            }
+    
+            // Update the item with validated data
+            $item->update($validatedData);
+    
+            // Return the updated item
             return response()->json([
                 'success' => true,
                 'message' => 'Item updated successfully',
@@ -154,7 +170,6 @@ class ItemController extends Controller
             ], 500);
         }
     }
-
     /**
      * Remove the specified resource from storage.
      */
