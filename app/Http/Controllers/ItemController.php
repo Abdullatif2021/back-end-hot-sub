@@ -88,28 +88,33 @@ class ItemController extends Controller
      * Display the specified resource.
      */
     public function show($id)
-    {
-        try {
-            $item = Item::with('category')->findOrFail($id);
+{
+    try {
+        $item = Item::with('category')->findOrFail($id);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Item retrieved successfully',
-                'data' => $item,
-            ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Item not found',
-            ], 404);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An unexpected error occurred',
-                'error' => $e->getMessage(),
-            ], 500);
+        // Update image URL for the item
+        if ($item->image) {
+            $item->image = url(Storage::url($item->image));
         }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item retrieved successfully',
+            'data' => $item,
+        ], 200);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Item not found',
+        ], 404);
+    } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An unexpected error occurred',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
 
     /**
      * Update the specified resource in storage.
