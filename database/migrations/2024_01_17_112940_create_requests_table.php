@@ -24,12 +24,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-{
-    Schema::table('requests', function (Blueprint $table) {
-        // Drop the foreign key constraint
-        $table->dropForeign(['service_id']);
-        // Drop the service_id column
-        $table->dropColumn('service_id');
-    });
-}
+    {
+        Schema::dropIfExists('requests');
+    }
 };
