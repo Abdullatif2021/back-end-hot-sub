@@ -15,6 +15,7 @@ use App\Http\Controllers\AboutUsImagesController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\DB; // Add this line
 
@@ -33,6 +34,7 @@ Route::middleware('auth:sanctum')->post('logout',  [AuthController::class, 'logo
 |--------------------------------------------------------------------------
 
 */
+Route::post('role', [RoleController::class, 'store']);
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::middleware(['role:admin|superadmin'])->group(function () {
@@ -46,7 +48,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::middleware(['role:user'])->group(function () {
-
+        
         Route::post('complaints', [ComplaintController::class, 'store']);
 
     });
